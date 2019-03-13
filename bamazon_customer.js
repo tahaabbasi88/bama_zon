@@ -18,8 +18,8 @@ connection.connect(function (err) {
 var makeTable = function () {
     connection.query("SELECT * FROM products", function (err, res) {
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].itemid + " || " + res[i].productname + " || " +
-                res[i].departmentname + " || " + res[i].price + " || " + res[i].stockquantity +
+            console.log(res[i].item_id + " || " + res[i].productname + " || " +
+                res[i].departmentname + " || " + res[i].price + " || " + res[i].quantity +
                 "\n");
         }
         promptCustomer(res);
@@ -43,7 +43,7 @@ var promptCustomer = function (res) {
                 var id = i;
                 inquirer.prompt({
                     type: "input",
-                    name: "quant",
+                    name: "quantity",
                     message: "How many would you like to buy?",
                     validate: function (value) {
                         if (isNaN(value) == false) {
@@ -53,8 +53,8 @@ var promptCustomer = function (res) {
                         }
                     }
                 }).then(function (answer) {
-                    if ((res[id].stockquantity - answer.quant) > 0) {
-                        connection.query("UPDATE products SET stockquantity= '" + (res[id].stockquantity - answer.quant) + "' WHERE productname= '" + product + "'", function (err, res2) {
+                    if ((res[id].quantity - answer.quant) > 0) {
+                        connection.query("UPDATE products SET quantity= '" + (res[id].quantity - answer.quant) + "' WHERE productname= '" + product + "'", function (err, res2) {
                             console.log("Product Bought!");
                             makeTable();
                         })

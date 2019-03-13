@@ -12,10 +12,10 @@ var connection = mysql.createConnection({
 var makeTable = function () {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        console.log("ItemID\tProduct Name\tPrice\tNumber in Stock");
+        console.log("Item_ID\tProduct Name\tPrice\tNumber in Stock");
         console.log("---------------------------");
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].itemid + "\t" + res[i].productname + "\t" + res[i].departmentname + "\t" + res[i].price + "\t" + res[i].stockquantity);
+            console.log(res[i].item_id + "\t" + res[i].productname + "\t" + res[i].departmentname + "\t" + res[i].price + "\t" + res[i].quantity);
         }
 
         console.log("---------------------------");
@@ -58,7 +58,7 @@ function addItem() {
         name: "quantity",
         message: "How many of the item are available for sale?"
     }]).then(function (val) {
-        connection.query("INSERT INTO products (productname,departmentname,price,stockquantity) VALUES ('" + val.productname + "','" + val.departmentname + "'," + val.price + "," + val.quantity + ");", function (err, res) {
+        connection.query("INSERT INTO products (productname,departmentname,price,quantity) VALUES ('" + val.productname + "','" + val.departmentname + "'," + val.price + "," + val.quantity + ");", function (err, res) {
             if (err) throw err;
             console.log(val.productname + " ADDED TO BAMAZON!");
             makeTable();
@@ -78,7 +78,7 @@ function addQuantity(res) {
     }]).then(function (val) {
         for (i = 0; i < res.length; i++) {
             if (res[i].productname == val.productname) {
-                connection.query('UPDATE products SET stockquantity=stockquantity+' + val.added + ' WHERE itemid= ' + res[i].itemid + ';', function (err, res) {
+                connection.query('UPDATE products SET quantity=quantity+' + val.added + ' WHERE item_id= ' + res[i].item_id + ';', function (err, res) {
                     if (err) throw err;
                     if (res.affectedRows == 0) {
                         console.log("That item does not exist at this time. Try selecting a different item.");
